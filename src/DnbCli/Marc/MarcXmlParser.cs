@@ -6,12 +6,33 @@ namespace DnbCli.Marc;
 
 public static class MarcXmlParser
 {
-    public static SearchEnvelope ParseSearchResponse(string xml, string query)
+    public static SearchEnvelope ParseSearchResponse(string xml, string query, int page = 1, int limit = 0)
     {
         var doc = XDocument.Parse(xml);
         ThrowIfDiagnostic(doc);
-        // Real implementation comes in Task 8+.
-        throw new NotImplementedException("ParseSearchResponse body — implemented in later tasks");
+
+        var total = 0;
+        var totalEl = doc.Descendants(MarcXmlConstants.Srw + "numberOfRecords").FirstOrDefault();
+        if (totalEl != null && int.TryParse(totalEl.Value, out var parsed)) total = parsed;
+
+        var results = new List<DnbRecord>();
+        foreach (var rec in doc.Descendants(MarcXmlConstants.Marc + "record"))
+        {
+            var cf001 = rec.Elements(MarcXmlConstants.Marc + "controlfield")
+                .FirstOrDefault(e => e.Attribute("tag")?.Value == "001");
+            if (cf001 == null || string.IsNullOrEmpty(cf001.Value)) continue;
+            results.Add(ParseRecord(rec, cf001.Value));
+        }
+
+        return new SearchEnvelope
+        {
+            Query = query,
+            TotalResults = total,
+            ReturnedResults = results.Count,
+            Page = page,
+            Limit = limit,
+            Results = results
+        };
     }
 
     public static DnbRecord ParseRecord(XElement recordEl, string dnbId)

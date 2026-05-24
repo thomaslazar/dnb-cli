@@ -30,4 +30,10 @@
     <ProjectReference Include="..\..\src\DnbCli\DnbCli.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="fixtures\*.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

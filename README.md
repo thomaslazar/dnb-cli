@@ -62,7 +62,36 @@ dnb self-test
 
 ## Commands
 
-<!-- Commands table is filled in by Task 21 -->
+| Command | Description |
+|---------|-------------|
+| `lookup --isbn <isbn>` | Look up a record by ISBN (10 or 13 digits, hyphens optional) |
+| `lookup --id <dnbId>` | Look up a record by DNB record identifier (the `001` field) |
+| `search --title <text>` | Search by title (CQL `TIT`); use trailing `*` for prefix-match |
+| `search --author <text>` | Search by person (CQL `PER`) — author or any contributor |
+| `search --year <yyyy>` | Search by year of publication (CQL `JHR`) |
+| `search --series <text>` | Search by series (CQL `WOE`) |
+| `search --any <text>` | Search any field (CQL `WOE`) |
+| `search --limit N` | Cap results, 1–100 (default 20) |
+| `search --page N` | Page number, 1-based (default 1) |
+| `self-test` | Verify AOT binary integrity (no network required) |
+| `changelog [--all]` | Print release notes from the bundled `CHANGELOG.md` |
+| `--version` | Print version |
+| `--help` | Show help |
+
+**Global flags** (work on every command): `--pretty` (indent JSON), `--timeout <ms>` (HTTP timeout), `--verbose` (debug logging to stderr).
+
+**Exit codes:**
+
+| Code | Meaning |
+|------|---------|
+| `0` | Hit — `lookup` found a record, `search` returned ≥1 result |
+| `1` | Generic / unexpected error |
+| `2` | No results — DNB returned 200 with zero records |
+| `3` | Bad input — malformed ISBN, missing required flag, value out of range |
+| `4` | Network / transport error — timeout, DNS, connection refused |
+| `5` | Upstream / DNB error — HTTP 5xx, SRU diagnostic, malformed XML |
+
+stdout is always valid JSON. On error categories 1–5, `lookup` emits the literal `null`; `search` emits its envelope with empty `results`. Diagnostics go to stderr with a timestamp + level prefix.
 
 ## Configuration
 

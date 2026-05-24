@@ -1,0 +1,32 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+# Build output
+publish/
+artifacts/
+
+# Reference checkouts (cloned locally, never committed)
+temp/
+
+# Test output
+TestResults/
+coverage*.xml
+coverage*.json
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Smoke-test build artifacts
+src/DnbCli/bin/smoke-test/
+
+# Release workflow draft (used by .claude/skills/release/SKILL.md, never committed)
+release-notes.md

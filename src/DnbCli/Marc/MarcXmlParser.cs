@@ -26,7 +26,8 @@ public static class MarcXmlParser
             Edition = NullIfEmpty(First(recordEl, "250", "a")),
             Extent = NullIfEmpty(First(recordEl, "300", "a")),
             Description = ParseDescription(recordEl),
-            // Contributors, Series, Keywords, Genres, Subjects, MarcSource — added in later tasks
+            Contributors = ParseContributors(recordEl),
+            // Series, Keywords, Genres, Subjects, MarcSource — added in later tasks
             MarcSource = BuildMarcSourceUrl(dnbId)
         };
         return record;
@@ -98,6 +99,42 @@ public static class MarcXmlParser
         var b = SubFirst(d520, "b");
         var joined = string.Join(" ", new[] { a, b }.Where(s => !string.IsNullOrEmpty(s)));
         return string.IsNullOrEmpty(joined) ? null : joined;
+    }
+
+    private static List<Contributor> ParseContributors(XElement r)
+    {
+        var list = new List<Contributor>();
+        foreach (var tag in new[] { "100", "700" })
+        {
+            foreach (var df in DataFields(r, tag))
+            {
+                var name = SubFirst(df, "a");
+                if (string.IsNullOrEmpty(name)) continue;
+                list.Add(new Contributor
+                {
+                    Name = name.Normalize(),
+                    Role = Subs(df, "4").FirstOrDefault() ?? "",
+                    RoleLabel = NullIfEmpty(SubFirst(df, "e")),
+                    GndId = ExtractGndId(string.Join(" ", Subs(df, "0")))
+                });
+            }
+        }
+        return list;
+    }
+
+    internal static string? ExtractGndId(string raw)
+    {
+        if (string.IsNullOrEmpty(raw)) return null;
+        foreach (var token in raw.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (token.StartsWith("(DE-588)", StringComparison.Ordinal))
+                return token["(DE-588)".Length..];
+            if (token.StartsWith("https://d-nb.info/gnd/", StringComparison.Ordinal))
+                return token["https://d-nb.info/gnd/".Length..];
+            if (token.StartsWith("(DE-101)", StringComparison.Ordinal))
+                return token["(DE-101)".Length..];
+        }
+        return null;
     }
 
     internal static string BuildMarcSourceUrl(string dnbId)

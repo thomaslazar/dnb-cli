@@ -26,4 +26,19 @@
     <EmbeddedResource Include="..\..\CHANGELOG.md" LogicalName="CHANGELOG.md" />
   </ItemGroup>
 
+  <!--
+  Regenerates Commands/ResponseExamples.g.cs when any Models/*.cs or codegen
+  tool source changes. Forward slashes only — MSBuild normalises them on
+  Windows, but backslashes are treated as literal chars on Linux/macOS.
+  The tool project does NOT reference DnbCli (it source-links Models/* via
+  <Compile Include>), so this Exec does not recurse into DnbCli's build.
+-->
+  <Target Name="RegenerateResponseExamples"
+          BeforeTargets="CoreCompile"
+          Inputs="$(MSBuildProjectDirectory)/Models/**/*.cs;$(MSBuildThisFileFullPath);$(MSBuildProjectDirectory)/../../tools/GenerateResponseExamples/**/*.cs"
+          Outputs="$(MSBuildProjectDirectory)/Commands/ResponseExamples.g.cs">
+    <Exec Command="dotnet run --project &quot;$(MSBuildProjectDirectory)/../../tools/GenerateResponseExamples/GenerateResponseExamples.csproj&quot; -- &quot;$(MSBuildProjectDirectory)/Commands/ResponseExamples.g.cs&quot;"
+          ConsoleToMSBuild="true" />
+  </Target>
+
 </Project>

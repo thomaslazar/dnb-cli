@@ -13,7 +13,8 @@ var rootCommand = new RootCommand("dnb-cli — Deutsche Nationalbibliothek metad
 {
     LookupCommand.Create(MakeService),
     SearchCommand.Create(MakeService),
-    SelfTestCommand.Create()
+    SelfTestCommand.Create(),
+    ChangelogCommand.Create()
 };
 
 return await rootCommand.Parse(args).InvokeAsync();

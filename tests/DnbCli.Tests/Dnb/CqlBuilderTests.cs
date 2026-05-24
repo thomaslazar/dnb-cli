@@ -6,15 +6,15 @@ namespace DnbCli.Tests.Dnb;
 public class CqlBuilderTests
 {
     [Fact]
-    public void ForIsbn_strips_hyphens_and_uses_ISB_index()
+    public void ForIsbn_strips_hyphens_and_uses_isbn_index()
     {
-        Assert.Equal("ISB=9783753931104", CqlBuilder.ForIsbn("978-3-7539-3110-4"));
+        Assert.Equal("isbn=9783753931104", CqlBuilder.ForIsbn("978-3-7539-3110-4"));
     }
 
     [Fact]
     public void ForIsbn_preserves_trailing_X_for_isbn10()
     {
-        Assert.Equal("ISB=395956175X", CqlBuilder.ForIsbn("3-95956-175-X"));
+        Assert.Equal("isbn=395956175X", CqlBuilder.ForIsbn("3-95956-175-X"));
     }
 
     [Fact]

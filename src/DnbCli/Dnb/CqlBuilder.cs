@@ -8,7 +8,7 @@ public static class CqlBuilder
     public static string ForIsbn(string isbn)
     {
         var normalized = NormalizeIsbn(isbn);
-        return $"ISB={normalized}";
+        return $"isbn={normalized}";
     }
 
     public static string ForDnbId(string dnbId)

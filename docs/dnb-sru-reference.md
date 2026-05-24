@@ -21,7 +21,7 @@ Anonymous read access. No registration, no token, no rate-limit headers document
 
 | Index | Maps to flag | Meaning |
 |---|---|---|
-| `ISB` | (used internally by `lookup --isbn`) | ISBN |
+| `isbn` | (used internally by `lookup --isbn`) | ISBN — index is lowercase per DNB SRU, others are uppercase |
 | `IDN` | (used internally by `lookup --id`) | DNB record identifier (`001` field) |
 | `TIT` | `--title` | Title |
 | `PER` | `--author` | Person (author or any contributor) |

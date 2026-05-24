@@ -12,7 +12,8 @@ DnbService MakeService() => new(sharedHttp, TimeSpan.FromMilliseconds(timeoutMs)
 var rootCommand = new RootCommand("dnb-cli — Deutsche Nationalbibliothek metadata lookup")
 {
     LookupCommand.Create(MakeService),
-    SearchCommand.Create(MakeService)
+    SearchCommand.Create(MakeService),
+    SelfTestCommand.Create()
 };
 
 return await rootCommand.Parse(args).InvokeAsync();

@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="..\..\CHANGELOG.md" LogicalName="CHANGELOG.md" />
+    <EmbeddedResource Include="Resources\selftest-record.xml" LogicalName="selftest-record.xml" />
   </ItemGroup>
 
   <!--

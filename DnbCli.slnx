@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DnbCli/DnbCli.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DnbCli.Tests/DnbCli.Tests.csproj" />
+  </Folder>
+</Solution>

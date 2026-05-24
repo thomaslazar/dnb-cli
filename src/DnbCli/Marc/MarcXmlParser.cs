@@ -28,7 +28,9 @@ public static class MarcXmlParser
             Description = ParseDescription(recordEl),
             Contributors = ParseContributors(recordEl),
             Series = ParseSeries(recordEl),
-            // Keywords, Genres, Subjects — added in later tasks
+            Genres = DataFields(recordEl, "655").SelectMany(df => Subs(df, "a")).ToList(),
+            Subjects = DataFields(recordEl, "650").SelectMany(df => Subs(df, "a")).ToList(),
+            Keywords = DataFields(recordEl, "653").SelectMany(df => Subs(df, "a")).ToList(),
             MarcSource = BuildMarcSourceUrl(dnbId)
         };
         return record;

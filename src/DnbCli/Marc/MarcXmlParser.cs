@@ -27,7 +27,8 @@ public static class MarcXmlParser
             Extent = NullIfEmpty(First(recordEl, "300", "a")),
             Description = ParseDescription(recordEl),
             Contributors = ParseContributors(recordEl),
-            // Series, Keywords, Genres, Subjects, MarcSource — added in later tasks
+            Series = ParseSeries(recordEl),
+            // Keywords, Genres, Subjects — added in later tasks
             MarcSource = BuildMarcSourceUrl(dnbId)
         };
         return record;
@@ -120,6 +121,44 @@ public static class MarcXmlParser
             }
         }
         return list;
+    }
+
+    private static List<SeriesEntry> ParseSeries(XElement r)
+    {
+        var all = new List<SeriesEntry>();
+        foreach (var tag in new[] { "490", "830" })
+        {
+            foreach (var df in DataFields(r, tag))
+            {
+                var name = SubFirst(df, "a");
+                if (string.IsNullOrEmpty(name)) continue;
+                all.Add(new SeriesEntry
+                {
+                    Name = name,
+                    Volume = NullIfEmpty(SubFirst(df, "v"))
+                });
+            }
+        }
+        return DedupeSeries(all);
+    }
+
+    internal static List<SeriesEntry> DedupeSeries(List<SeriesEntry> input)
+    {
+        static string Normalize(string s) =>
+            new string((s ?? "").ToLowerInvariant()
+                .Where(c => !char.IsControl(c))
+                .ToArray())
+            .Replace("  ", " ")
+            .Replace("  ", " ")
+            .Trim();
+        var seen = new HashSet<string>();
+        var result = new List<SeriesEntry>();
+        foreach (var entry in input)
+        {
+            var key = Normalize(entry.Name) + "||" + (entry.Volume ?? "");
+            if (seen.Add(key)) result.Add(entry);
+        }
+        return result;
     }
 
     internal static string? ExtractGndId(string raw)

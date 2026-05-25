@@ -34,7 +34,7 @@ public sealed class DnbService
 
     public async Task<SearchEnvelope> SearchAsync(
         string? title = null,
-        string? author = null,
+        string? contributor = null,
         string? year = null,
         string? series = null,
         string? any = null,
@@ -42,7 +42,7 @@ public sealed class DnbService
         int page = 1,
         CancellationToken ct = default)
     {
-        var cql = CqlBuilder.ForSearch(title, author, year, series, any);
+        var cql = CqlBuilder.ForSearch(title, contributor, year, series, any);
         var startRecord = (page - 1) * limit + 1;
         var xml = await GetXmlAsync(cql, limit, startRecord, ct);
         return MarcXmlParser.ParseSearchResponse(xml, cql, page, limit);

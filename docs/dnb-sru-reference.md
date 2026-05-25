@@ -24,7 +24,7 @@ Anonymous read access. No registration, no token, no rate-limit headers document
 | `isbn` | (used internally by `lookup --isbn`) | ISBN — index is lowercase per DNB SRU, others are uppercase |
 | `IDN` | (used internally by `lookup --id`) | DNB record identifier (`001` field) |
 | `TIT` | `--title` | Title |
-| `PER` | `--author` | Person (author or any contributor) |
+| `PER` | `--contributor` | Person in any contributor role — author, translator, illustrator, editor, narrator |
 | `JHR` | `--year` | Year of publication |
 | `WOE` | `--series` and `--any` | Any word in any field |
 

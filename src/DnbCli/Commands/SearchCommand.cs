@@ -12,7 +12,7 @@ public static class SearchCommand
     public static Command Create(Func<DnbService> serviceFactory)
     {
         var titleOption = new Option<string?>("--title") { Description = "Title (CQL TIT). Use trailing * for prefix match." };
-        var authorOption = new Option<string?>("--author") { Description = "Person — author or any contributor (CQL PER)." };
+        var contributorOption = new Option<string?>("--contributor") { Description = "Person in any contributor role — author, translator, illustrator, editor, or narrator (CQL PER)." };
         var yearOption = new Option<string?>("--year") { Description = "Year of publication (CQL JHR)." };
         var seriesOption = new Option<string?>("--series") { Description = "Series name (CQL WOE)." };
         var anyOption = new Option<string?>("--any") { Description = "Match any field (CQL WOE)." };
@@ -22,10 +22,10 @@ public static class SearchCommand
         limitOption.DefaultValueFactory = _ => 20;
         pageOption.DefaultValueFactory = _ => 1;
 
-        var command = new Command("search", "Search DNB by title, author, year, series, or any field")
-        { titleOption, authorOption, yearOption, seriesOption, anyOption, limitOption, pageOption, prettyOption };
+        var command = new Command("search", "Search DNB by title, contributor, year, series, or any field")
+        { titleOption, contributorOption, yearOption, seriesOption, anyOption, limitOption, pageOption, prettyOption };
         command.AddExamples(
-            "dnb search --title \"Blendwerk*\" --author Butcher --limit 5",
+            "dnb search --title \"Blendwerk*\" --contributor Butcher --limit 5",
             "dnb search --series \"Flüsse von London\" --pretty",
             "dnb search --any Dresden --year 2024 --page 2");
         command.AddResponseExample<SearchEnvelope>();
@@ -33,7 +33,7 @@ public static class SearchCommand
         command.SetAction(async (parseResult, ct) =>
         {
             var title = parseResult.GetValue(titleOption);
-            var author = parseResult.GetValue(authorOption);
+            var contributor = parseResult.GetValue(contributorOption);
             var year = parseResult.GetValue(yearOption);
             var series = parseResult.GetValue(seriesOption);
             var any = parseResult.GetValue(anyOption);
@@ -41,11 +41,11 @@ public static class SearchCommand
             var page = parseResult.GetValue(pageOption);
             var pretty = parseResult.GetValue(prettyOption);
 
-            if (string.IsNullOrWhiteSpace(title) && string.IsNullOrWhiteSpace(author)
+            if (string.IsNullOrWhiteSpace(title) && string.IsNullOrWhiteSpace(contributor)
                 && string.IsNullOrWhiteSpace(year) && string.IsNullOrWhiteSpace(series)
                 && string.IsNullOrWhiteSpace(any))
             {
-                _logger.Error("At least one of --title/--author/--year/--series/--any is required.");
+                _logger.Error("At least one of --title/--contributor/--year/--series/--any is required.");
                 ConsoleOutput.WriteNull();
                 return ExitCodes.BadInput;
             }
@@ -65,7 +65,7 @@ public static class SearchCommand
             SearchEnvelope envelope;
             try
             {
-                envelope = await serviceFactory().SearchAsync(title, author, year, series, any, limit, page, ct);
+                envelope = await serviceFactory().SearchAsync(title, contributor, year, series, any, limit, page, ct);
             }
             catch (ArgumentException ex) { _logger.Error(ex.Message); ConsoleOutput.WriteNull(); return ExitCodes.BadInput; }
             catch (DnbNetworkException ex) { _logger.Error(ex.Message); ConsoleOutput.WriteNull(); return ExitCodes.Network; }

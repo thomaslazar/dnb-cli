@@ -33,7 +33,7 @@ public class CqlBuilderTests
     [Fact]
     public void ForSearch_combines_multiple_flags_with_and()
     {
-        var cql = CqlBuilder.ForSearch(title: "Blendwerk*", author: "Butcher", year: "2024");
+        var cql = CqlBuilder.ForSearch(title: "Blendwerk*", contributor: "Butcher", year: "2024");
         Assert.Equal("TIT=Blendwerk* and PER=Butcher and JHR=2024", cql);
     }
 

@@ -55,7 +55,7 @@ Grab the binary for your platform from the [latest release](https://github.com/t
 
 ```bash
 dnb lookup --isbn 9783837165890
-dnb search --title "Blendwerk*" --author "Butcher" --limit 5
+dnb search --title "Blendwerk*" --contributor "Butcher" --limit 5
 dnb self-test
 ```
 
@@ -66,7 +66,7 @@ dnb self-test
 | `lookup --isbn <isbn>` | Look up a record by ISBN (10 or 13 digits, hyphens optional) |
 | `lookup --id <dnbId>` | Look up a record by DNB record identifier (the `001` field) |
 | `search --title <text>` | Search by title (CQL `TIT`); use trailing `*` for prefix-match |
-| `search --author <text>` | Search by person (CQL `PER`) — author or any contributor |
+| `search --contributor <text>` | Search by person in any contributor role — author, translator, illustrator, editor, narrator (CQL `PER`) |
 | `search --year <yyyy>` | Search by year of publication (CQL `JHR`) |
 | `search --series <text>` | Search by series (CQL `WOE`) |
 | `search --any <text>` | Search any field (CQL `WOE`) |

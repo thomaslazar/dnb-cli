@@ -18,19 +18,19 @@ public static class CqlBuilder
 
     public static string ForSearch(
         string? title = null,
-        string? author = null,
+        string? contributor = null,
         string? year = null,
         string? series = null,
         string? any = null)
     {
         var clauses = new List<string>();
         if (!string.IsNullOrWhiteSpace(title)) clauses.Add($"TIT={Format(title!)}");
-        if (!string.IsNullOrWhiteSpace(author)) clauses.Add($"PER={Format(author!)}");
+        if (!string.IsNullOrWhiteSpace(contributor)) clauses.Add($"PER={Format(contributor!)}");
         if (!string.IsNullOrWhiteSpace(year)) clauses.Add($"JHR={Format(year!)}");
         if (!string.IsNullOrWhiteSpace(series)) clauses.Add($"WOE={Format(series!)}");
         if (!string.IsNullOrWhiteSpace(any)) clauses.Add($"WOE={Format(any!)}");
         if (clauses.Count == 0)
-            throw new ArgumentException("At least one of --title/--author/--year/--series/--any must be supplied.");
+            throw new ArgumentException("At least one of --title/--contributor/--year/--series/--any must be supplied.");
         return string.Join(" and ", clauses);
     }
 

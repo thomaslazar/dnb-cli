@@ -136,7 +136,11 @@ public static class SampleJsonWalker
         {
             if (prop.GetIndexParameters().Length > 0) continue;
             if (prop.GetCustomAttribute<JsonIgnoreAttribute>() != null) continue;
-            var name = prop.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ?? prop.Name;
+            // Apply JsonContext's CamelCase naming policy so the rendered sample
+            // matches actual JSON output. Without this, the help shows PascalCase
+            // (`"Query"`) while real stdout emits camelCase (`"query"`).
+            var name = prop.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name
+                       ?? JsonNamingPolicy.CamelCase.ConvertName(prop.Name);
             writer.WritePropertyName(name);
 
             var key = (type, prop.Name);

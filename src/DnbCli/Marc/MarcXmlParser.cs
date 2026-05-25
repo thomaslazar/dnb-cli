@@ -218,15 +218,16 @@ public static class MarcXmlParser
             if (sub.Attribute("code")?.Value == code)
             {
                 var v = sub.Value;
-                if (!string.IsNullOrEmpty(v)) yield return v;
+                if (!string.IsNullOrEmpty(v)) yield return v.Normalize(System.Text.NormalizationForm.FormC);
             }
         }
     }
 
-    private static string SubFirst(XElement? df, string code) => Subs(df, code).FirstOrDefault() ?? "";
+    private static string SubFirst(XElement? df, string code) =>
+        (Subs(df, code).FirstOrDefault() ?? "").Normalize(System.Text.NormalizationForm.FormC);
 
-    private static string First(XElement r, string tag, string code)
-        => Subs(DataFields(r, tag).FirstOrDefault(), code).FirstOrDefault() ?? "";
+    private static string First(XElement r, string tag, string code) =>
+        (Subs(DataFields(r, tag).FirstOrDefault(), code).FirstOrDefault() ?? "").Normalize(System.Text.NormalizationForm.FormC);
 
     private static string? NullIfEmpty(string s) => string.IsNullOrEmpty(s) ? null : s;
 
@@ -250,8 +251,12 @@ public static class MarcXmlParser
     private static string TrimIsbd(string s)
     {
         // Strip trailing ISBD field-separator marks: " /", " :", " =", " ;", " ,"
+        // and ISBD sort-exclusion markers (U+0098 START OF STRING / U+009C STRING TERMINATOR)
+        // that DNB wraps around leading articles like "Die"/"Der"/"The" so catalog sort
+        // skips them. They are invisible in most renderers but break exact-match consumers.
         if (string.IsNullOrEmpty(s)) return s;
-        var trimmed = s.TrimEnd();
+        var stripped = s.Replace("", "").Replace("", "");
+        var trimmed = stripped.TrimEnd();
         foreach (var marker in new[] { " /", " :", " =", " ;", " ," })
         {
             while (trimmed.EndsWith(marker, StringComparison.Ordinal))

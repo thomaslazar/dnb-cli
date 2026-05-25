@@ -11,44 +11,44 @@ public class SerializationTests
     {
         var record = new DnbRecord
         {
-            DnbId = "1356869467",
-            Isbns = new List<string> { "9783753931104" },
+            DnbId = "1314588753",
+            Isbns = new List<string> { "9783837165890" },
             Title = new Title
             {
-                Main = "YoRHa - Abstieg 11941",
-                Subtitle = "Eine NieR:Automata Story",
+                Main = "Die dunklen Fälle des Harry Dresden - Blendwerk",
+                Subtitle = "Roman",
                 PartNumber = null,
                 PartName = null,
-                Uniform = "YoRHa Shinjuwan Koka Sakusen Kiroku 04",
-                StatementOfResponsibility = "Taro Yoko, Megumu Soramichi"
+                Uniform = "Skin Game (The Dresden Files 15) (Penguin RoC, New York 2014)",
+                StatementOfResponsibility = "Jim Butcher"
             },
             Series = new List<SeriesEntry>
             {
-                new() { Name = "YoRHa - Abstieg 11941", Volume = "4" }
+                new() { Name = "Die Harry-Dresden-Serie", Volume = "15" }
             },
             Languages = new Languages
             {
                 Publication = new List<string> { "ger" },
-                Original = new List<string> { "jpn" }
+                Original = new List<string> { "eng" }
             },
             Contributors = new List<Contributor>
             {
-                new() { Name = "Yokoo, Tarō", Role = "aut", RoleLabel = "Verfasser", GndId = "1253467463" },
-                new() { Name = "Lange, Markus", Role = "trl", RoleLabel = "Übersetzer", GndId = null }
+                new() { Name = "Butcher, Jim", Role = "aut", RoleLabel = "Verfasser", GndId = null },
+                new() { Name = "Heinrici, Dominik", Role = "trl", RoleLabel = "Übersetzer", GndId = null }
             },
             Publication = new Publication
             {
-                Place = "Hamburg",
-                Publisher = "Altraverse",
-                Date = "2025"
+                Place = "München",
+                Publisher = "Random House Audio",
+                Date = "2024"
             },
-            Edition = "1. Auflage",
-            Extent = "228 Seiten",
+            Edition = "Ungekürzte Lesung, ungekürzte Ausgabe",
+            Extent = "Online-Ressource",
             Description = null,
-            Genres = new List<string> { "Comic" },
+            Genres = new List<string> { "Fantasy" },
             Subjects = new List<string>(),
-            Keywords = new List<string> { "Krieg", "Yoko Taro" },
-            MarcSource = "https://services.dnb.de/sru/dnb?version=1.1&operation=searchRetrieve&query=IDN%3D1356869467&recordSchema=MARC21-xml"
+            Keywords = new List<string> { "krimi", "fantasy" },
+            MarcSource = "https://services.dnb.de/sru/dnb?version=1.1&operation=searchRetrieve&query=IDN%3D1314588753&recordSchema=MARC21-xml"
         };
 
         var json = JsonSerializer.Serialize(record, JsonContext.Default.DnbRecord);
@@ -71,7 +71,7 @@ public class SerializationTests
     {
         var envelope = new SearchEnvelope
         {
-            Query = "TIT=Naruto",
+            Query = "PER=Butcher",
             TotalResults = 9,
             ReturnedResults = 5,
             Page = 1,
@@ -81,7 +81,7 @@ public class SerializationTests
         var json = JsonSerializer.Serialize(envelope, JsonContext.Default.SearchEnvelope);
         var back = JsonSerializer.Deserialize(json, JsonContext.Default.SearchEnvelope)!;
         Assert.Equal(9, back.TotalResults);
-        Assert.Equal("TIT=Naruto", back.Query);
+        Assert.Equal("PER=Butcher", back.Query);
         Assert.Empty(back.Results);
     }
 

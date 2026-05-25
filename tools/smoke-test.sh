@@ -11,8 +11,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # Known-good DNB samples used as test targets
-KNOWN_ISBN_YORHA=9783753931104     # YoRHa - Abstieg 11941, Bd. 4 (e-book)
-KNOWN_ISBN_NAGATORO=9783959561754  # Neck mich nicht, Nagatoro-san, Bd. 05
+KNOWN_ISBN_BUTCHER=9783837165890   # Jim Butcher, Die dunklen Fälle des Harry Dresden - Blendwerk, Bd. 15 (audiobook)
+KNOWN_ISBN_AARONOVITCH=9783423221870  # Ben Aaronovitch, Die Meerjungfrauen von Aberdeen, Bd. 10
 NOT_FOUND_ISBN=9780000000002
 
 if [ -z "${CLI:-}" ]; then
@@ -81,9 +81,9 @@ echo "$out" | grep -q "^## " && pass "changelog starts with ##" || fail "changel
 
 # === lookup --isbn (hit) ===
 echo "=== lookup --isbn (hit) ==="
-out=$($CLI lookup --isbn "$KNOWN_ISBN_YORHA"); ec=$?
+out=$($CLI lookup --isbn "$KNOWN_ISBN_BUTCHER"); ec=$?
 assert_exit "lookup hit exit 0" 0 $ec
-assert_jq "lookup hit returns YoRHa ISBN" "'$KNOWN_ISBN_YORHA' in d['isbns']" "$out"
+assert_jq "lookup hit returns Butcher ISBN" "'$KNOWN_ISBN_BUTCHER' in d['isbns']" "$out"
 assert_jq "lookup hit has contributors" "len(d['contributors']) > 0" "$out"
 
 # === lookup --isbn (miss) ===
@@ -95,7 +95,7 @@ else fail "lookup miss stdout is null" "got: ${out:0:100}"; fi
 
 # === search ===
 echo "=== search ==="
-out=$($CLI search --title "YoRHa" --limit 3); ec=$?
+out=$($CLI search --title "Blendwerk" --limit 3); ec=$?
 assert_exit "search hit exit 0" 0 $ec
 assert_jq "search has results array" "isinstance(d['results'], list) and len(d['results']) > 0" "$out"
 assert_jq "search totalResults is int" "isinstance(d['totalResults'], int)" "$out"

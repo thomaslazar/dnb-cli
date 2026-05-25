@@ -7,21 +7,21 @@ namespace DnbCli.Tests.Marc;
 public class MarcXmlParserContributorsTests
 {
     [Fact]
-    public void YoRHa_vol4_ebook_contributors_with_roles_and_gnd_ids()
+    public void Butcher_blendwerk_15_contributors_with_roles()
     {
-        var xml = File.ReadAllText("fixtures/yorha-vol4-ebook.xml");
-        var record = MarcXmlParser.ParseRecord(XElement.Parse(xml), "1356869467");
+        var xml = File.ReadAllText("fixtures/butcher-blendwerk-15.xml");
+        var record = MarcXmlParser.ParseRecord(XElement.Parse(xml), "1314588753");
 
         Assert.Equal(3, record.Contributors.Count);
-        var yokoo = record.Contributors[0];
-        Assert.Equal("Yokoo, Tarō", yokoo.Name);
-        Assert.Equal("aut", yokoo.Role);
-        Assert.Equal("Verfasser", yokoo.RoleLabel);
-        Assert.Equal("1253467463", yokoo.GndId);
+        var butcher = record.Contributors[0];
+        Assert.Equal("Butcher, Jim", butcher.Name);
+        Assert.Equal("aut", butcher.Role);
+        Assert.Equal("Verfasser", butcher.RoleLabel);
+        Assert.Null(butcher.GndId);
 
         var translator = record.Contributors.FirstOrDefault(c => c.Role == "trl");
         Assert.NotNull(translator);
-        Assert.Equal("Lange, Markus", translator!.Name);
+        Assert.Equal("Heinrici, Dominik", translator!.Name);
         Assert.Null(translator.GndId);
     }
 

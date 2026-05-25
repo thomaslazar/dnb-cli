@@ -36,21 +36,21 @@ public static class SelfTestCommand
             Check("ParseRecord populates expected fields", () =>
             {
                 var xml = ReadEmbeddedString("selftest-record.xml");
-                var rec = MarcXmlParser.ParseRecord(XElement.Parse(xml), "1356869467");
-                Assert(rec.DnbId == "1356869467", $"dnbId: {rec.DnbId}");
-                Assert(rec.Isbns.Contains("9783753931104"), "ISBN missing");
+                var rec = MarcXmlParser.ParseRecord(XElement.Parse(xml), "1314588753");
+                Assert(rec.DnbId == "1314588753", $"dnbId: {rec.DnbId}");
+                Assert(rec.Isbns.Contains("9783837165890"), "ISBN missing");
                 Assert(rec.Languages.Publication.Contains("ger"), "language ger missing");
-                Assert(rec.Languages.Original.Contains("jpn"), "original language jpn missing");
+                Assert(rec.Languages.Original.Contains("eng"), "original language eng missing");
                 Assert(rec.Contributors.Any(c => c.Role == "trl"), "translator not surfaced");
-                Assert(rec.Series.Count == 1 && rec.Series[0].Volume == "4", $"series mismatch");
+                Assert(rec.Series.Count == 1 && rec.Series[0].Volume == "15", $"series mismatch");
             });
 
             Check("DnbRecord serializes via source-gen", () =>
             {
                 var xml = ReadEmbeddedString("selftest-record.xml");
-                var rec = MarcXmlParser.ParseRecord(XElement.Parse(xml), "1356869467");
+                var rec = MarcXmlParser.ParseRecord(XElement.Parse(xml), "1314588753");
                 var json = JsonSerializer.Serialize(rec, JsonContext.Default.DnbRecord);
-                Assert(json.Contains("\"dnbId\":\"1356869467\""), "dnbId not in output");
+                Assert(json.Contains("\"dnbId\":\"1314588753\""), "dnbId not in output");
                 JsonDocument.Parse(json); // throws on invalid JSON
             });
 

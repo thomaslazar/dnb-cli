@@ -1,6 +1,6 @@
 # dnb-cli
 
-A command-line interface for the Deutsche Nationalbibliothek (DNB) SRU catalogue. Built for agent-driven metadata fallback on German-language titles — pipe nothing in, get JSON out.
+A command-line interface for the Deutsche Nationalbibliothek (DNB) SRU catalogue. Built for agent-driven metadata lookup on German-language titles.
 
 Native AOT binary. No runtime required. ~10 MB.
 
@@ -11,7 +11,6 @@ Native AOT binary. No runtime required. ~10 MB.
 - **JSON-only output** — stdout is always valid JSON, errors go to stderr
 - **Native AOT** — single self-contained binary, no .NET runtime needed
 - **MARC21-XML parsing** — direct, faithful mapping of DNB records to flat JSON
-- **Series + Bandnummer** — the killer feature for German manga that other providers miss
 - **Translators, original-language linkage, GND identifiers** — all surfaced with role tags
 - **Structured exit codes** — `0` hit, `2` no-results, `3` bad input, `4` network, `5` upstream
 
@@ -55,8 +54,8 @@ Grab the binary for your platform from the [latest release](https://github.com/t
 ## Quick start
 
 ```bash
-dnb lookup --isbn 9783753931104
-dnb search --title "Naruto*" --author "Kishimoto" --limit 5
+dnb lookup --isbn 9783837165890
+dnb search --title "Blendwerk*" --author "Butcher" --limit 5
 dnb self-test
 ```
 

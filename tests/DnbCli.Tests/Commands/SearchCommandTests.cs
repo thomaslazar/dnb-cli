@@ -30,7 +30,7 @@ public class SearchCommandTests
     public async Task Search_with_no_flags_returns_exit_3()
     {
         LogSetup.Configure(verbose: false);
-        var svc = new DnbService(new HttpClient(new YorhaHandler()), TimeSpan.FromSeconds(10));
+        var svc = new DnbService(new HttpClient(new ButcherHandler()), TimeSpan.FromSeconds(10));
         var cmd = SearchCommand.Create(() => svc);
         var (rc, _) = await RunAsync(cmd);
         Assert.Equal(ExitCodes.BadInput, rc);
@@ -40,9 +40,9 @@ public class SearchCommandTests
     public async Task Search_with_title_returns_envelope_and_exit_0()
     {
         LogSetup.Configure(verbose: false);
-        var svc = new DnbService(new HttpClient(new YorhaHandler()), TimeSpan.FromSeconds(10));
+        var svc = new DnbService(new HttpClient(new ButcherHandler()), TimeSpan.FromSeconds(10));
         var cmd = SearchCommand.Create(() => svc);
-        var (rc, stdout) = await RunAsync(cmd, "--title", "YoRHa", "--limit", "5");
+        var (rc, stdout) = await RunAsync(cmd, "--title", "Blendwerk", "--limit", "5");
         Assert.Equal(ExitCodes.Hit, rc);
         Assert.Contains("\"results\"", stdout);
         Assert.Contains("\"totalResults\"", stdout);
@@ -66,16 +66,16 @@ public class SearchCommandTests
     public async Task Search_with_limit_out_of_range_returns_exit_3(string limit)
     {
         LogSetup.Configure(verbose: false);
-        var svc = new DnbService(new HttpClient(new YorhaHandler()), TimeSpan.FromSeconds(10));
+        var svc = new DnbService(new HttpClient(new ButcherHandler()), TimeSpan.FromSeconds(10));
         var cmd = SearchCommand.Create(() => svc);
         var (rc, _) = await RunAsync(cmd, "--title", "X", "--limit", limit);
         Assert.Equal(ExitCodes.BadInput, rc);
     }
 
-    private sealed class YorhaHandler : HttpMessageHandler
+    private sealed class ButcherHandler : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage req, CancellationToken ct)
-            => Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(File.ReadAllText("fixtures/yorha.xml")) });
+            => Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(File.ReadAllText("fixtures/butcher.xml")) });
     }
     private sealed class EmptyHandler : HttpMessageHandler
     {

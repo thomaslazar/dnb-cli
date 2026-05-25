@@ -30,7 +30,7 @@ public class LookupCommandTests
     public async Task Lookup_with_no_flag_returns_exit_3()
     {
         LogSetup.Configure(verbose: false);
-        var svc = new DnbService(new HttpClient(new YorhaHandler()), TimeSpan.FromSeconds(10));
+        var svc = new DnbService(new HttpClient(new ButcherHandler()), TimeSpan.FromSeconds(10));
         var cmd = LookupCommand.Create(() => svc);
         var (rc, _) = await RunAsync(cmd);
         Assert.Equal(ExitCodes.BadInput, rc);
@@ -40,9 +40,9 @@ public class LookupCommandTests
     public async Task Lookup_isbn_hit_returns_exit_0_and_writes_json()
     {
         LogSetup.Configure(verbose: false);
-        var svc = new DnbService(new HttpClient(new YorhaHandler()), TimeSpan.FromSeconds(10));
+        var svc = new DnbService(new HttpClient(new ButcherHandler()), TimeSpan.FromSeconds(10));
         var cmd = LookupCommand.Create(() => svc);
-        var (rc, stdout) = await RunAsync(cmd, "--isbn", "9783753931104");
+        var (rc, stdout) = await RunAsync(cmd, "--isbn", "9783837165890");
         Assert.Equal(ExitCodes.Hit, rc);
         Assert.Contains("\"dnbId\"", stdout);
     }
@@ -58,11 +58,11 @@ public class LookupCommandTests
         Assert.Equal("null", stdout.Trim());
     }
 
-    private sealed class YorhaHandler : HttpMessageHandler
+    private sealed class ButcherHandler : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage req, CancellationToken ct)
             => Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK)
-            { Content = new StringContent(File.ReadAllText("fixtures/yorha.xml")) });
+            { Content = new StringContent(File.ReadAllText("fixtures/butcher.xml")) });
     }
     private sealed class EmptyHandler : HttpMessageHandler
     {

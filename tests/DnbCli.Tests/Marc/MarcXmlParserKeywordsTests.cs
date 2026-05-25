@@ -7,31 +7,31 @@ namespace DnbCli.Tests.Marc;
 public class MarcXmlParserKeywordsTests
 {
     [Fact]
-    public void YoRHa_vol4_ebook_keywords_kept_raw_including_prefixed_entries()
+    public void Butcher_blendwerk_15_keywords_kept_raw_including_prefixed_entries()
     {
-        var xml = File.ReadAllText("fixtures/yorha-vol4-ebook.xml");
-        var r = MarcXmlParser.ParseRecord(XElement.Parse(xml), "1356869467");
-        Assert.Contains("Krieg", r.Keywords);
-        Assert.Contains("Yoko Taro", r.Keywords);
-        Assert.Contains("(Produktform)Electronic book text", r.Keywords);
-        Assert.Contains("(Zielgruppe)ab 16 Jahre", r.Keywords);
+        var xml = File.ReadAllText("fixtures/butcher-blendwerk-15.xml");
+        var r = MarcXmlParser.ParseRecord(XElement.Parse(xml), "1314588753");
+        Assert.Contains("krimi", r.Keywords);
+        Assert.Contains("fantasy", r.Keywords);
+        Assert.Contains("(Produktform)Downloadable audio file", r.Keywords);
+        Assert.Contains("(BISAC Subject Heading)FIC009060", r.Keywords);
     }
 
     [Fact]
-    public void YoRHa_vol4_ebook_subjects_is_empty_for_manga()
+    public void Butcher_blendwerk_15_subjects_is_empty()
     {
-        var xml = File.ReadAllText("fixtures/yorha-vol4-ebook.xml");
-        var r = MarcXmlParser.ParseRecord(XElement.Parse(xml), "1356869467");
+        var xml = File.ReadAllText("fixtures/butcher-blendwerk-15.xml");
+        var r = MarcXmlParser.ParseRecord(XElement.Parse(xml), "1314588753");
         Assert.Empty(r.Subjects);
     }
 
     [Fact]
-    public void YoRHa_vol4_ebook_marcSource_url_is_constructed_correctly()
+    public void Butcher_blendwerk_15_marcSource_url_is_constructed_correctly()
     {
-        var xml = File.ReadAllText("fixtures/yorha-vol4-ebook.xml");
-        var r = MarcXmlParser.ParseRecord(XElement.Parse(xml), "1356869467");
+        var xml = File.ReadAllText("fixtures/butcher-blendwerk-15.xml");
+        var r = MarcXmlParser.ParseRecord(XElement.Parse(xml), "1314588753");
         Assert.Equal(
-            "https://services.dnb.de/sru/dnb?version=1.1&operation=searchRetrieve&query=IDN%3D1356869467&recordSchema=MARC21-xml",
+            "https://services.dnb.de/sru/dnb?version=1.1&operation=searchRetrieve&query=IDN%3D1314588753&recordSchema=MARC21-xml",
             r.MarcSource);
     }
 }

@@ -15,55 +15,54 @@ public class MarcXmlParserCoreFieldsTests
     }
 
     [Fact]
-    public void YoRHa_vol4_ebook_dnbId_and_isbns()
+    public void Butcher_blendwerk_15_dnbId_and_isbns()
     {
-        var r = ParseFixture("yorha-vol4-ebook.xml", "1356869467");
-        Assert.Equal("1356869467", r.DnbId);
-        Assert.Contains("9783753931104", r.Isbns);
+        var r = ParseFixture("butcher-blendwerk-15.xml", "1314588753");
+        Assert.Equal("1314588753", r.DnbId);
+        Assert.Contains("9783837165890", r.Isbns);
     }
 
     [Fact]
-    public void YoRHa_vol4_ebook_title_block()
+    public void Butcher_blendwerk_15_title_block()
     {
-        var r = ParseFixture("yorha-vol4-ebook.xml", "1356869467");
-        Assert.Equal("YoRHa - Abstieg 11941 04", r.Title.Main);
-        Assert.Equal("Eine NieR:Automata Story", r.Title.Subtitle);
-        Assert.Equal("YoRHa Shinjuwan Koka Sakusen Kiroku 04", r.Title.Uniform);
-        Assert.Equal("Taro Yoko, Megumu Soramichi", r.Title.StatementOfResponsibility);
+        var r = ParseFixture("butcher-blendwerk-15.xml", "1314588753");
+        Assert.Equal("Die dunklen Fälle des Harry Dresden - Blendwerk", r.Title.Main);
+        Assert.Equal("Roman", r.Title.Subtitle);
+        Assert.Equal("Skin Game (The Dresden Files 15) (Penguin RoC, New York 2014)", r.Title.Uniform);
+        Assert.Equal("Jim Butcher", r.Title.StatementOfResponsibility);
     }
 
     [Fact]
-    public void YoRHa_vol4_ebook_languages()
+    public void Butcher_blendwerk_15_languages()
     {
-        var r = ParseFixture("yorha-vol4-ebook.xml", "1356869467");
+        var r = ParseFixture("butcher-blendwerk-15.xml", "1314588753");
         Assert.Equal(new List<string> { "ger" }, r.Languages.Publication);
-        Assert.Equal(new List<string> { "jpn" }, r.Languages.Original);
+        Assert.Equal(new List<string> { "eng" }, r.Languages.Original);
     }
 
     [Fact]
-    public void YoRHa_vol4_ebook_publication_and_extent_and_edition()
+    public void Butcher_blendwerk_15_publication_and_extent_and_edition()
     {
-        var r = ParseFixture("yorha-vol4-ebook.xml", "1356869467");
-        Assert.Equal("Hamburg", r.Publication.Place);
-        Assert.Equal("Altraverse", r.Publication.Publisher);
-        Assert.Equal("2025", r.Publication.Date);
-        Assert.Equal("Online-Ressource, 228 Seiten", r.Extent);
-        // YoRHa Bd 4 e-book has no 250 — older print editions do
-        Assert.Null(r.Edition);
+        var r = ParseFixture("butcher-blendwerk-15.xml", "1314588753");
+        Assert.Equal("München", r.Publication.Place);
+        Assert.Equal("Random House Audio", r.Publication.Publisher);
+        Assert.Equal("2024", r.Publication.Date);
+        Assert.Equal("Online-Ressource", r.Extent);
+        Assert.Equal("Ungekürzte Lesung, ungekürzte Ausgabe", r.Edition);
     }
 
     [Fact]
-    public void YoRHa_vol4_ebook_no_description()
+    public void Butcher_blendwerk_15_no_description()
     {
-        var r = ParseFixture("yorha-vol4-ebook.xml", "1356869467");
+        var r = ParseFixture("butcher-blendwerk-15.xml", "1314588753");
         Assert.Null(r.Description);
     }
 
     [Fact]
-    public void YoRHa_vol4_ebook_strips_ISBD_trailing_punctuation_from_title_main()
+    public void Butcher_blendwerk_15_strips_ISBD_trailing_punctuation_from_title_main()
     {
-        var r = ParseFixture("yorha-vol4-ebook.xml", "1356869467");
-        // Common DNB tail: "...Abstieg 11941 04 /" → trim trailing ` /`
+        var r = ParseFixture("butcher-blendwerk-15.xml", "1314588753");
+        // Common DNB tail: "...Blendwerk /" → trim trailing ` /`
         Assert.DoesNotMatch("[ /:=;,]\\s*$", r.Title.Main);
     }
 }

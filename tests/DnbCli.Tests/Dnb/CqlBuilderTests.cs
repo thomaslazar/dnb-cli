@@ -26,22 +26,22 @@ public class CqlBuilderTests
     [Fact]
     public void ForSearch_emits_single_clause_when_only_title_set()
     {
-        var cql = CqlBuilder.ForSearch(title: "Naruto*");
-        Assert.Equal("TIT=Naruto*", cql);
+        var cql = CqlBuilder.ForSearch(title: "Blendwerk*");
+        Assert.Equal("TIT=Blendwerk*", cql);
     }
 
     [Fact]
     public void ForSearch_combines_multiple_flags_with_and()
     {
-        var cql = CqlBuilder.ForSearch(title: "Naruto*", author: "Kishimoto", year: "2024");
-        Assert.Equal("TIT=Naruto* and PER=Kishimoto and JHR=2024", cql);
+        var cql = CqlBuilder.ForSearch(title: "Blendwerk*", author: "Butcher", year: "2024");
+        Assert.Equal("TIT=Blendwerk* and PER=Butcher and JHR=2024", cql);
     }
 
     [Fact]
     public void ForSearch_uses_WOE_for_series_and_any()
     {
-        Assert.Equal("WOE=Nagatoro", CqlBuilder.ForSearch(series: "Nagatoro"));
-        Assert.Equal("WOE=Manga", CqlBuilder.ForSearch(any: "Manga"));
+        Assert.Equal("WOE=Buddenbrooks", CqlBuilder.ForSearch(series: "Buddenbrooks"));
+        Assert.Equal("WOE=Roman", CqlBuilder.ForSearch(any: "Roman"));
     }
 
     [Fact]

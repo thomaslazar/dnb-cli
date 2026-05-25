@@ -25,9 +25,9 @@ public static class SearchCommand
         var command = new Command("search", "Search DNB by title, author, year, series, or any field")
         { titleOption, authorOption, yearOption, seriesOption, anyOption, limitOption, pageOption, prettyOption };
         command.AddExamples(
-            "dnb search --title \"Naruto*\" --author Kishimoto --limit 5",
-            "dnb search --series \"Nagatoro-san\" --pretty",
-            "dnb search --any Manga --year 2024 --page 2");
+            "dnb search --title \"Blendwerk*\" --author Butcher --limit 5",
+            "dnb search --series \"Flüsse von London\" --pretty",
+            "dnb search --any Dresden --year 2024 --page 2");
         command.AddResponseExample<SearchEnvelope>();
 
         command.SetAction(async (parseResult, ct) =>

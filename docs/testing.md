@@ -23,8 +23,8 @@ Tests that mutate global NLog state are decorated with `[Collection("NLog")]` (s
 
 Hits the live DNB SRU endpoint with known-good ISBNs:
 
-- `9783753931104` — YoRHa Bd. 4 (e-book)
-- `9783959561754` — Nagatoro Bd. 5
+- `9783837165890` — Jim Butcher, Blendwerk Bd. 15 (audiobook)
+- `9783423221870` — Ben Aaronovitch, Meerjungfrauen Bd. 10
 - `0000000000000` — known-not-found (asserts exit 2)
 
 Run with:

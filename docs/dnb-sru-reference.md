@@ -61,5 +61,5 @@ See `docs/superpowers/specs/2026-05-24-dnb-cli-design.md` §5 for the full mappi
 
 | ISBN | DNB-ID | Title |
 |---|---|---|
-| `9783753931104` | `1356869467` | YoRHa - Abstieg 11941, Bd. 4 (e-book) |
-| `9783959561754` | `1303545276` | Neck mich nicht, Nagatoro-san, Bd. 05 |
+| `9783837165890` | `1314588753` | Jim Butcher, Die dunklen Fälle des Harry Dresden - Blendwerk, Bd. 15 (audiobook) |
+| `9783423221870` | `1395994714` | Ben Aaronovitch, Die Meerjungfrauen von Aberdeen, Bd. 10 |

@@ -2,6 +2,27 @@
 
 All notable changes to dnb-cli are documented in this file.
 
+## v0.1.1 — 2026-06-01
+
+Bugfix release. v0.1.0 was hitting HTTP 429 on real-world use because DNB's
+frontend fingerprints the polite-scraper "(+url)" contact-info pattern in
+our User-Agent and rate-limits matching clients aggressively. v0.1.1 drops
+that token; same query, same IP empirically goes from 7-of-10 throttled to
+10-of-10 succeeding.
+
+### Highlights
+
+- Lookups and searches now succeed reliably against live DNB; no more spurious HTTP 429 / exit-5 surfacing from short bursts.
+- CI re-runs the live-DNB smoke-test job alongside unit tests and the 6-platform AOT matrix.
+
+### Fixes
+
+- fix: drop URL-in-UA pattern that DNB WAF rate-limits
+
+### CI
+
+- ci: re-enable live-DNB smoke-test job
+
 ## v0.1.0 — 2026-06-01
 
 Initial public release of dnb-cli — a Native AOT .NET 10 command-line tool

@@ -22,23 +22,9 @@ jobs:
       - name: Run unit tests
         run: dotnet test tests/DnbCli.Tests/DnbCli.Tests.csproj
 
-  smoke-test:
-    needs: unit-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: '10.0.x'
-      - name: Build AOT binary
-        run: >
-          dotnet publish src/DnbCli/DnbCli.csproj
-          -c Release -r linux-x64 --self-contained true /p:PublishAot=true
-          -o ./publish
-      - name: Run smoke tests against live DNB
-        run: bash tools/smoke-test.sh
-        env:
-          CLI: ./publish/dnb-cli
+  # Live-DNB smoke test runs locally before opening a PR (see CLAUDE.md).
+  # Not run in CI: the DNB SRU endpoint rate-limits GitHub Actions IPs
+  # aggressively (HTTP 429 on the first query) regardless of pacing.
 
   build:
     needs: unit-test

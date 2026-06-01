@@ -16,7 +16,14 @@ public sealed class DnbService
         if (_http.Timeout == Timeout.InfiniteTimeSpan || _http.Timeout > timeout)
             _http.Timeout = timeout;
         if (!_http.DefaultRequestHeaders.UserAgent.Any())
-            _http.DefaultRequestHeaders.UserAgent.ParseAdd("dnb-cli/0.1.0 (+https://github.com/thomaslazar/dnb-cli)");
+        {
+            // Identify the tool + version. Do NOT include the polite-scraper
+            // "(+url)" contact-info pattern: DNB's frontend WAF fingerprints
+            // exactly that token and rate-limits matching User-Agents very
+            // aggressively (empirically 7/10 → HTTP 429 from a fresh IP).
+            // Plain "dnb-cli/{version}" passes cleanly.
+            _http.DefaultRequestHeaders.UserAgent.ParseAdd("dnb-cli/0.1.0");
+        }
     }
 
     public Task<DnbRecord?> LookupByIsbnAsync(string isbn, CancellationToken ct = default)

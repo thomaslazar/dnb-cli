@@ -79,8 +79,14 @@ echo "=== changelog ==="
 out="$($CLI changelog)" && pass "changelog runs" || fail "changelog runs" "non-zero"
 echo "$out" | grep -q "^## " && pass "changelog starts with ##" || fail "changelog starts with ##" "no h2"
 
+# DNB's SRU endpoint rate-limits aggressive bursts with HTTP 429. Space the
+# live-hitting assertions out so a CI run from a single IP isn't seen as a
+# burst. Two seconds between DNB hits empirically clears the limiter.
+dnb_pause() { sleep 2; }
+
 # === lookup --isbn (hit) ===
 echo "=== lookup --isbn (hit) ==="
+dnb_pause
 out=$($CLI lookup --isbn "$KNOWN_ISBN_BUTCHER"); ec=$?
 assert_exit "lookup hit exit 0" 0 $ec
 assert_jq "lookup hit returns Butcher ISBN" "'$KNOWN_ISBN_BUTCHER' in d['isbns']" "$out"
@@ -88,6 +94,7 @@ assert_jq "lookup hit has contributors" "len(d['contributors']) > 0" "$out"
 
 # === lookup --isbn (miss) ===
 echo "=== lookup --isbn (miss) ==="
+dnb_pause
 set +e; out=$($CLI lookup --isbn "$NOT_FOUND_ISBN" 2>/dev/null); ec=$?; set -e
 assert_exit "lookup miss exit 2" 2 $ec
 if [ "$(echo "$out" | tr -d '[:space:]')" = "null" ]; then pass "lookup miss stdout is null"
@@ -95,6 +102,7 @@ else fail "lookup miss stdout is null" "got: ${out:0:100}"; fi
 
 # === search ===
 echo "=== search ==="
+dnb_pause
 out=$($CLI search --title "Blendwerk" --limit 3); ec=$?
 assert_exit "search hit exit 0" 0 $ec
 assert_jq "search has results array" "isinstance(d['results'], list) and len(d['results']) > 0" "$out"
@@ -102,6 +110,7 @@ assert_jq "search totalResults is int" "isinstance(d['totalResults'], int)" "$ou
 
 # === search no-results ===
 echo "=== search no-results ==="
+dnb_pause
 set +e; out=$($CLI search --title "DEFINITELYNOTAREALSEARCHQUERYYYY" 2>/dev/null); ec=$?; set -e
 assert_exit "search no-results exit 2" 2 $ec
 assert_jq "search no-results totalResults=0" "d['totalResults'] == 0" "$out"
